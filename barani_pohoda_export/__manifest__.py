@@ -3,7 +3,7 @@
 {
     # ── Identity ──────────────────────────────────────────────────────────
     'name': "BARANI POHODA Export",
-    'version': '16.0.1.11.3',
+    'version': '16.0.1.11.4',
     'summary': "Export invoices, tax-config-driven advance invoices and settlements from Odoo to POHODA XML",
     'description': """
 BARANI POHODA Export
