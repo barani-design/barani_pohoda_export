@@ -1,0 +1,47 @@
+/* Part of the BARANI POHODA Export module. See LICENSE file for full copyright and licensing details.
+ * DOC 03: sticky rule labels + sticky profile header, visual cell states. */
+
+.o_pohoda_matrix_table {
+    th.o_pohoda_sticky_top {
+        position: sticky;
+        top: 0;
+        background: #fff;
+        z-index: 2;
+    }
+    th.o_pohoda_sticky_left {
+        position: sticky;
+        left: 0;
+        background: #fff;
+        z-index: 1;
+        text-align: left;
+        white-space: nowrap;
+    }
+    th.o_pohoda_sticky_corner {
+        position: sticky;
+        top: 0;
+        left: 0;
+        background: #fff;
+        z-index: 3;
+    }
+    td.o_pohoda_cell {
+        cursor: pointer;
+        min-width: 170px;
+        vertical-align: top;
+    }
+    td.o_pohoda_cell:hover {
+        background: rgba(0, 0, 0, 0.04);
+    }
+    .o_pohoda_state_active {
+        background: #28a745;
+    }
+    .o_pohoda_state_blocked {
+        background: #dc3545;
+    }
+    .o_pohoda_state_review_required {
+        background: #ffc107;
+        color: #212529;
+    }
+    .o_pohoda_state_not_applicable {
+        background: #6c757d;
+    }
+}

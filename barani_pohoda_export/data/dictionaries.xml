@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- noupdate="1": seeded once on install; accountant edits to labels are NOT
+         overwritten on module upgrade, while genuinely new codes still get added. -->
+    <data noupdate="1">
+
+        <!-- ============ Account assignments ============ -->
+        <record id="aa_1" model="barani.pohoda.account.assignment">
+            <field name="code">1</field>
+            <field name="name">POHODA account assignment 1 - accountant label required</field>
+        </record>
+        <record id="aa_2" model="barani.pohoda.account.assignment">
+            <field name="code">2</field>
+            <field name="name">POHODA account assignment 2 - accountant label required</field>
+        </record>
+        <record id="aa_3" model="barani.pohoda.account.assignment">
+            <field name="code">3</field>
+            <field name="name">POHODA account assignment 3 - accountant label required</field>
+        </record>
+        <record id="aa_bez" model="barani.pohoda.account.assignment">
+            <field name="code">Bez</field>
+            <field name="name">Without accounting candidate for advance invoice - import-test required</field>
+        </record>
+        <!-- Advance / down-payment-deduction předkontace. A received advance and its
+             later settlement deduction post their BASE to 324 (Prijaté preddavky),
+             not to a revenue account (604). The code below is a PLACEHOLDER token:
+             the accountant must map it to BARANI's real POHODA předkontace whose
+             credit side is 324 (with VAT auto-routed to 343 per the line rateVAT)
+             before any production export. -->
+        <record id="aa_advance_324" model="barani.pohoda.account.assignment">
+            <field name="code">324</field>
+            <field name="name">Advance / deduction base -&gt; 324 Prijaté preddavky (POHODA předkontace placeholder - accountant to map before production)</field>
+            <field name="is_advance_account" eval="True"/>
+        </record>
+
+        <!-- ============ VAT classifications ============ -->
+        <record id="vat_ud" model="barani.pohoda.vat.classification">
+            <field name="code">UD</field>
+            <field name="name">Domestic VAT classification - accountant label required</field>
+        </record>
+        <record id="vat_uddodeu" model="barani.pohoda.vat.classification">
+            <field name="code">UDdodEU</field>
+            <field name="name">EU goods supply classification - accountant label required</field>
+        </record>
+        <record id="vat_udzahrsl" model="barani.pohoda.vat.classification">
+            <field name="code">UDzahrSl</field>
+            <field name="name">EU service classification - accountant label required</field>
+        </record>
+        <record id="vat_unodps" model="barani.pohoda.vat.classification">
+            <field name="code">UNodpS</field>
+            <field name="name">Foreign/non-EU export/service classification - accountant label required</field>
+        </record>
+        <record id="vat_un" model="barani.pohoda.vat.classification">
+            <field name="code">UN</field>
+            <field name="name">Not included in VAT return / do not include - accountant label required</field>
+        </record>
+        <record id="vat_urozdiel" model="barani.pohoda.vat.classification">
+            <field name="code">Urozdiel</field>
+            <field name="name">Credit note difference classification - accountant label required</field>
+        </record>
+
+        <!-- ============ Control statement (KV) codes ============ -->
+        <record id="kv_a1" model="barani.pohoda.control.statement.code">
+            <field name="code">A1</field>
+            <field name="name">KV/control statement A1 - accountant label required</field>
+        </record>
+        <record id="kv_d2" model="barani.pohoda.control.statement.code">
+            <field name="code">D2</field>
+            <field name="name">KV/control statement D2 - accountant label required</field>
+        </record>
+        <record id="kv_c1" model="barani.pohoda.control.statement.code">
+            <field name="code">C1</field>
+            <field name="name">KV/control statement C1 - accountant label required</field>
+        </record>
+        <record id="kv_kn" model="barani.pohoda.control.statement.code">
+            <field name="code">KN</field>
+            <field name="name">KV/control statement KN - accountant label required</field>
+        </record>
+        <record id="kv_un" model="barani.pohoda.control.statement.code">
+            <field name="code">UN</field>
+            <field name="name">UN control / no-control candidate - accountant label required</field>
+        </record>
+
+        <!-- ============ MOSS service types ============ -->
+        <record id="moss_gd" model="barani.pohoda.moss.service.type">
+            <field name="code">GD</field>
+            <field name="name">OSS/MOSS goods type; allowed for OSS goods/shipping, not mailed-in repairs performed in Slovakia</field>
+        </record>
+
+    </data>
+</odoo>

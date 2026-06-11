@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Account assignment -->
+    <record id="view_pohoda_account_assignment_tree" model="ir.ui.view">
+        <field name="name">barani.pohoda.account.assignment.tree</field>
+        <field name="model">barani.pohoda.account.assignment</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_pohoda_account_assignment_form" model="ir.ui.view">
+        <field name="name">barani.pohoda.account.assignment.form</field>
+        <field name="model">barani.pohoda.account.assignment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="valid_for"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_pohoda_account_assignment" model="ir.actions.act_window">
+        <field name="name">Account Assignments</field>
+        <field name="res_model">barani.pohoda.account.assignment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- VAT classification -->
+    <record id="view_pohoda_vat_classification_tree" model="ir.ui.view">
+        <field name="name">barani.pohoda.vat.classification.tree</field>
+        <field name="model">barani.pohoda.vat.classification</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="valid_for_country"/>
+                <field name="valid_for_document"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_pohoda_vat_classification_form" model="ir.ui.view">
+        <field name="name">barani.pohoda.vat.classification.form</field>
+        <field name="model">barani.pohoda.vat.classification</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="valid_for_country"/>
+                        <field name="valid_for_document"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_pohoda_vat_classification" model="ir.actions.act_window">
+        <field name="name">VAT Classifications</field>
+        <field name="res_model">barani.pohoda.vat.classification</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Control statement (KV) -->
+    <record id="view_pohoda_control_statement_tree" model="ir.ui.view">
+        <field name="name">barani.pohoda.control.statement.code.tree</field>
+        <field name="model">barani.pohoda.control.statement.code</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="valid_for_partner"/>
+                <field name="valid_for_document"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_pohoda_control_statement_form" model="ir.ui.view">
+        <field name="name">barani.pohoda.control.statement.code.form</field>
+        <field name="model">barani.pohoda.control.statement.code</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="valid_for_partner"/>
+                        <field name="valid_for_document"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_pohoda_control_statement" model="ir.actions.act_window">
+        <field name="name">Control Statement Codes</field>
+        <field name="res_model">barani.pohoda.control.statement.code</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- MOSS service type -->
+    <record id="view_pohoda_moss_service_type_tree" model="ir.ui.view">
+        <field name="name">barani.pohoda.moss.service.type.tree</field>
+        <field name="model">barani.pohoda.moss.service.type</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="valid_for_profile"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_pohoda_moss_service_type_form" model="ir.ui.view">
+        <field name="name">barani.pohoda.moss.service.type.form</field>
+        <field name="model">barani.pohoda.moss.service.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="valid_for_profile"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_pohoda_moss_service_type" model="ir.actions.act_window">
+        <field name="name">MOSS Service Types</field>
+        <field name="res_model">barani.pohoda.moss.service.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

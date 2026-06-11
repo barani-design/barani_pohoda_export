@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_pohoda_root" name="POHODA Export" sequence="90"
+              web_icon="barani_pohoda_export,static/description/icon.png"
+              groups="barani_pohoda_export.group_export_user"/>
+
+    <menuitem id="menu_pohoda_export" name="Export" parent="menu_pohoda_root" sequence="10"/>
+    <menuitem id="menu_pohoda_export_wizard" name="New Export" parent="menu_pohoda_export"
+              action="action_pohoda_export_wizard" sequence="5"
+              groups="barani_pohoda_export.group_export_manager"/>
+    <menuitem id="menu_pohoda_batches" name="Export Batches" parent="menu_pohoda_export"
+              action="action_pohoda_export_batch" sequence="10"/>
+
+    <menuitem id="menu_pohoda_config" name="Configuration" parent="menu_pohoda_root" sequence="20"
+              groups="barani_pohoda_export.group_export_config_manager"/>
+    <menuitem id="menu_pohoda_settings" name="Settings" parent="menu_pohoda_config"
+              action="action_pohoda_config" sequence="10"/>
+    <menuitem id="menu_pohoda_profiles" name="Fiscal Profiles" parent="menu_pohoda_config"
+              action="action_pohoda_fiscal_profile" sequence="20"/>
+    <menuitem id="menu_pohoda_rules" name="Export Rules" parent="menu_pohoda_config"
+              action="action_pohoda_export_rule" sequence="30"/>
+    <menuitem id="menu_pohoda_matrix" name="Mapping Matrix" parent="menu_pohoda_config"
+              action="action_pohoda_matrix_editor" sequence="35"/>
+    <menuitem id="menu_pohoda_cells" name="Mapping Cells" parent="menu_pohoda_config"
+              action="action_pohoda_mapping_cell" sequence="40"/>
+
+    <menuitem id="menu_pohoda_dicts" name="Dictionaries" parent="menu_pohoda_root" sequence="30"
+              groups="barani_pohoda_export.group_export_config_manager"/>
+    <menuitem id="menu_pohoda_dict_account" name="Account Assignments" parent="menu_pohoda_dicts"
+              action="action_pohoda_account_assignment" sequence="10"/>
+    <menuitem id="menu_pohoda_dict_vat" name="VAT Classifications" parent="menu_pohoda_dicts"
+              action="action_pohoda_vat_classification" sequence="20"/>
+    <menuitem id="menu_pohoda_dict_kv" name="Control Statement Codes" parent="menu_pohoda_dicts"
+              action="action_pohoda_control_statement" sequence="30"/>
+    <menuitem id="menu_pohoda_dict_moss" name="MOSS Service Types" parent="menu_pohoda_dicts"
+              action="action_pohoda_moss_service_type" sequence="40"/>
+</odoo>

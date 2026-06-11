@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- noupdate="1": seeded once, as INACTIVE template rules.
+
+         They are inactive on purpose. _check_match_targets requires an *active*
+         product/category rule to list real products/categories, and BARANI's
+         product categories do not exist on a fresh database. The config manager
+         links each rule to the real category/product tree and then sets it active.
+         The intended target for each rule is recorded in `notes`.
+
+         The POHODA code matrix (one cell per fiscal profile) is seeded separately
+         in data/mapping_cells.xml and is fully reviewable immediately — it does not
+         depend on the rules being active. -->
+    <data noupdate="1">
+
+        <record id="rule_odpocet_zalohy" model="barani.pohoda.export.rule">
+            <field name="config_id" ref="config_pohoda"/>
+            <field name="sequence">1</field>
+            <field name="name">Odpočet zálohy</field>
+            <field name="active" eval="False"/>
+            <field name="match_mode">product</field>
+            <field name="notes">Product-only rule for the Down payment product; MUST be first so advance deductions are caught before any category rule. Link to the real 'Down payment' product, then activate.</field>
+        </record>
+
+        <record id="rule_shipping_goods" model="barani.pohoda.export.rule">
+            <field name="config_id" ref="config_pohoda"/>
+            <field name="sequence">2</field>
+            <field name="name">Shipping - Goods (Doprava k tovaru)</field>
+            <field name="active" eval="False"/>
+            <field name="match_mode">category</field>
+            <field name="notes">Shipping / freight ancillary to goods. Link to category 'All / Shipping and Handling', then activate. OSS goods type GD is allowed for shipping of goods.</field>
+        </record>
+
+        <record id="rule_repairs_calibration" model="barani.pohoda.export.rule">
+            <field name="config_id" ref="config_pohoda"/>
+            <field name="sequence">3</field>
+            <field name="name">Repairs and Calibration</field>
+            <field name="active" eval="False"/>
+            <field name="match_mode">category</field>
+            <field name="notes">Link to category 'All / Repairs and Calibration', then activate. NOTE: the OSS B2C cell is BLOCKED — mailed-in repairs performed in Slovakia must use the domestic (Obchody v SK) treatment, not OSS.</field>
+        </record>
+
+        <record id="rule_vyrobky" model="barani.pohoda.export.rule">
+            <field name="config_id" ref="config_pohoda"/>
+            <field name="sequence">4</field>
+            <field name="name">Výrobky</field>
+            <field name="active" eval="False"/>
+            <field name="match_mode">category</field>
+            <field name="notes">Own finished products. Link explicit FPW finished-product categories ONLY (never the top 'All' products node), then activate.</field>
+        </record>
+
+        <record id="rule_tovar" model="barani.pohoda.export.rule">
+            <field name="config_id" ref="config_pohoda"/>
+            <field name="sequence">5</field>
+            <field name="name">Tovar</field>
+            <field name="active" eval="False"/>
+            <field name="match_mode">category</field>
+            <field name="review_required" eval="True"/>
+            <field name="notes">Bought-in / traded goods, plus saleable RPW child categories (TPW/...). review_required: the parent 'All / RPW' node must have every child category reviewed before activation.</field>
+        </record>
+
+        <record id="rule_sluzby" model="barani.pohoda.export.rule">
+            <field name="config_id" ref="config_pohoda"/>
+            <field name="sequence">6</field>
+            <field name="name">Služby</field>
+            <field name="active" eval="False"/>
+            <field name="match_mode">category</field>
+            <field name="residual_only" eval="True"/>
+            <field name="review_required" eval="True"/>
+            <field name="notes">Residual / general services only (category 'All / Services'). residual_only: must NOT absorb repairs, shipping, subscriptions/licenses or voucher products that have their own rules.</field>
+        </record>
+
+    </data>
+</odoo>

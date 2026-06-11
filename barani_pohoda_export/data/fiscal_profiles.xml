@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- noupdate="1": seeded once; account_fiscal_position_ids are environment-specific
+         and are intentionally left empty for the accountant to link per company. -->
+    <data noupdate="1">
+
+        <record id="fp_sk_domestic_no_vat_id" model="barani.pohoda.fiscal.profile">
+            <field name="name">SK Domestic / no VAT ID</field>
+            <field name="sequence">10</field>
+            <field name="geography">domestic</field>
+            <field name="customer_tax_status">no_vat_id</field>
+        </record>
+
+        <record id="fp_sk_domestic_vat_payer" model="barani.pohoda.fiscal.profile">
+            <field name="name">SK Domestic / VAT payer</field>
+            <field name="sequence">20</field>
+            <field name="geography">domestic</field>
+            <field name="customer_tax_status">vat_payer</field>
+        </record>
+
+        <record id="fp_eu_b2b_vat_payer" model="barani.pohoda.fiscal.profile">
+            <field name="name">EU B2B / VAT payer</field>
+            <field name="sequence">30</field>
+            <field name="geography">eu</field>
+            <field name="customer_tax_status">vat_payer</field>
+        </record>
+
+        <record id="fp_foreign_non_eu" model="barani.pohoda.fiscal.profile">
+            <field name="name">Foreign / non-EU</field>
+            <field name="sequence">40</field>
+            <field name="geography">foreign</field>
+            <field name="customer_tax_status">any</field>
+        </record>
+
+        <record id="fp_oss_b2c_goods" model="barani.pohoda.fiscal.profile">
+            <field name="name">OSS B2C Goods</field>
+            <field name="sequence">50</field>
+            <field name="geography">oss</field>
+            <field name="customer_tax_status">no_vat_id</field>
+            <field name="is_oss" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

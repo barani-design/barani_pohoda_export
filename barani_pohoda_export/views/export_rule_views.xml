@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pohoda_export_rule_tree" model="ir.ui.view">
+        <field name="name">barani.pohoda.export.rule.tree</field>
+        <field name="model">barani.pohoda.export.rule</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="match_mode"/>
+                <field name="residual_only"/>
+                <field name="review_required"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_pohoda_export_rule_form" model="ir.ui.view">
+        <field name="name">barani.pohoda.export.rule.form</field>
+        <field name="model">barani.pohoda.export.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="config_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="sequence"/>
+                            <field name="match_mode"/>
+                        </group>
+                        <group>
+                            <field name="include_child_categories"
+                                   attrs="{'invisible': [('match_mode', '!=', 'category')]}"/>
+                            <field name="also_match_products"/>
+                            <field name="review_required"/>
+                            <field name="residual_only"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Matches">
+                        <field name="product_ids" widget="many2many_tags"
+                               attrs="{'invisible': [('match_mode', '!=', 'product'), ('also_match_products', '=', False)]}"/>
+                        <field name="category_ids" widget="many2many_tags"
+                               attrs="{'invisible': [('match_mode', '!=', 'category')]}"/>
+                    </group>
+                    <notebook>
+                        <page string="Mapping cells">
+                            <field name="mapping_cell_ids">
+                                <tree editable="bottom">
+                                    <field name="fiscal_profile_id"/>
+                                    <field name="document_kind"/>
+                                    <field name="enabled_state"/>
+                                    <field name="account_assignment_id"/>
+                                    <field name="downpayment_account_assignment_id" optional="hide"/>
+                                    <field name="vat_classification_id"/>
+                                    <field name="control_statement_code_id"/>
+                                    <field name="moss_service_type_id" optional="hide"/>
+                                    <field name="company_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_pohoda_export_rule" model="ir.actions.act_window">
+        <field name="name">Export Rules</field>
+        <field name="res_model">barani.pohoda.export.rule</field>
+        <field name="view_mode">tree,form</field>
+        <!-- Show inactive template rules too: they ship inactive until the config
+             manager links them to real categories/products, then toggles Active. -->
+        <field name="context">{'active_test': False}</field>
+    </record>
+</odoo>

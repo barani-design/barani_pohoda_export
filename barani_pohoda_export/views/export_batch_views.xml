@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pohoda_export_batch_tree" model="ir.ui.view">
+        <field name="name">barani.pohoda.export.batch.tree</field>
+        <field name="model">barani.pohoda.export.batch</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="config_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="move_count"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_pohoda_export_batch_form" model="ir.ui.view">
+        <field name="name">barani.pohoda.export.batch.form</field>
+        <field name="model">barani.pohoda.export.batch</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_validate" type="object" string="Validate"
+                            class="oe_highlight" states="draft"
+                            groups="barani_pohoda_export.group_export_manager"/>
+                    <button name="action_generate_xml" type="object" string="Generate XML"
+                            class="oe_highlight" states="validated"
+                            groups="barani_pohoda_export.group_export_manager"/>
+                    <button name="action_mark_sent" type="object" string="Mark sent"
+                            class="oe_highlight" states="xml_generated"
+                            groups="barani_pohoda_export.group_export_manager"
+                            confirm="Confirm that the request XML was imported into POHODA. The batch becomes an immutable audit record."/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to draft"
+                            states="validated"
+                            groups="barani_pohoda_export.group_export_manager"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            states="draft,validated,xml_generated"
+                            groups="barani_pohoda_export.group_export_manager"/>
+                    <field name="state" widget="statusbar" readonly="1"/>
+                </header>
+                <sheet>
+                    <!-- Ungrouped company_id so config_id's check_company domain
+                         resolves for non-multi-company users; the visible,
+                         multi-company-only company_id is in the Scope group below. -->
+                    <field name="company_id" invisible="1"/>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="Scope">
+                            <field name="company_id" groups="base.group_multi_company"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="config_id"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="date_field"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="start_date"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="end_date"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                        <group string="Audit">
+                            <field name="move_count"/>
+                            <field name="created_by" readonly="1"/>
+                            <field name="sent_by" readonly="1"/>
+                            <field name="sent_at" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="XML artefacts">
+                        <group>
+                            <field name="request_attachment_id" readonly="1"/>
+                            <field name="request_sha256" readonly="1"/>
+                            <field name="mapping_version_hash" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="response_attachment_id" readonly="1"/>
+                            <field name="response_sha256" readonly="1"/>
+                            <field name="config_version_hash" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="validation_summary" readonly="1" placeholder="Validation summary..."/>
+                    <notebook>
+                        <page string="Documents">
+                            <field name="batch_move_ids" readonly="1">
+                                <tree>
+                                    <field name="move_id"/>
+                                    <field name="barani_doc_kind"/>
+                                    <field name="state"/>
+                                    <field name="pohoda_document_number"/>
+                                    <field name="validation_error_code"/>
+                                    <field name="response_state"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_pohoda_export_batch" model="ir.actions.act_window">
+        <field name="name">Export Batches</field>
+        <field name="res_model">barani.pohoda.export.batch</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

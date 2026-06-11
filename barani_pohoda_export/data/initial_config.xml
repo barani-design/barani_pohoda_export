@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- noupdate="1": a starter configuration the accountant customises in place.
+         Loaded AFTER data/dictionaries.xml because it references the UN VAT code.
+         Deliberately SAFE defaults:
+           - advance_flow_mode stays at 'block_until_configured' (model default), so
+             nothing exports until the advance flow is consciously enabled and
+             POHODA-import-tested. The pre-pivot SEED target value
+             (odoo_zero_vat_dpi_as_pohoda_advance_invoice) is a legacy key retained
+             for compatibility. It is not the classifier doc_kind; OQ-1 v2 uses one
+             advance_invoice kind and reads VAT from Odoo tax configuration.
+           - company_id assumes the main company; adjust if BARANI's company differs.
+           - journals, EU country group, IČO and POHODA key are environment-specific
+             and left empty for the accountant. -->
+    <data noupdate="1">
+
+        <record id="config_pohoda" model="barani.pohoda.export.config">
+            <field name="name">Pohoda</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active" eval="True"/>
+            <field name="document_header_vat_classification_id" ref="vat_un"/>
+            <!-- All other fields use model defaults:
+                 encoding=Windows-1250, key_date=invoice_date,
+                 accounting_date_source=invoice_date,
+                 advance_flow_mode=block_until_configured,
+                 dpi_symvar_policy=source_order_or_pf_reference,
+                 advance_credit_note_policy=test_gated,
+                 send_advance_deduction_with_reference=True,
+                 phase_1_payment_export=False, data_pack_version=2.0,
+                 invoice_version=2.0, evidentiary_resources=A,
+                 export_addresses=True, oss_enabled=False -->
+        </record>
+
+    </data>
+</odoo>

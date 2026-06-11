@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="barani_pohoda_export.PohodaMatrix" owl="1">
+    <div class="o_pohoda_matrix h-100 overflow-auto p-3">
+        <div class="d-flex align-items-center mb-3">
+            <h2 class="me-3 mb-0">POHODA Mapping Matrix</h2>
+            <select class="form-select w-auto me-2" t-on-change="setKind"
+                    aria-label="Document kind">
+                <t t-foreach="state.kinds" t-as="k" t-key="k[0]">
+                    <option t-att-value="k[0]"
+                            t-att-selected="k[0] === state.kind ? 'selected' : undefined"
+                            t-esc="k[1]"/>
+                </t>
+            </select>
+            <button class="btn btn-secondary" t-on-click="exportCsv">Export CSV</button>
+        </div>
+
+        <div t-if="state.loading" class="text-muted">Loading the matrix…</div>
+
+        <div t-elif="!state.rules.length" class="alert alert-info" role="alert">
+            No active export rules for this company. The seed ships its template rules
+            inactive — review and activate them under Configuration → Export Rules.
+        </div>
+
+        <div t-elif="!state.profiles.length" class="alert alert-info" role="alert">
+            No active fiscal profiles. Create the export-treatment columns under
+            Configuration → Fiscal Profiles.
+        </div>
+
+        <table t-else="" class="table table-bordered table-sm o_pohoda_matrix_table bg-white">
+            <thead>
+                <tr>
+                    <th class="o_pohoda_sticky_corner">Rule</th>
+                    <th t-foreach="state.profiles" t-as="p" t-key="p.id"
+                        class="o_pohoda_sticky_top text-center">
+                        <t t-esc="p.name"/>
+                        <span t-if="p.is_oss" class="badge bg-info ms-1">OSS</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr t-foreach="state.rules" t-as="r" t-key="r.id">
+                    <th class="o_pohoda_sticky_left">
+                        <t t-esc="r.sequence"/>. <t t-esc="r.name"/>
+                    </th>
+                    <td t-foreach="state.profiles" t-as="p" t-key="p.id"
+                        class="o_pohoda_cell text-center"
+                        t-on-click="() => this.openCell(r, p)">
+                        <t t-set="cell" t-value="cellFor(r, p)"/>
+                        <t t-if="cell">
+                            <span t-attf-class="badge o_pohoda_state_{{ cell.enabled_state }}"
+                                  t-esc="state.stateLabels[cell.enabled_state]"/>
+                            <div class="small text-muted">
+                                <t t-esc="codeOf(cell.account_assignment_id)"/> /
+                                <t t-esc="codeOf(cell.vat_classification_id)"/> /
+                                <t t-esc="codeOf(cell.control_statement_code_id)"/>
+                            </div>
+                            <div t-if="warningFor(cell, p)" class="small text-danger fw-bold"
+                                 t-esc="warningFor(cell, p)"/>
+                        </t>
+                        <span t-else="" class="text-muted fst-italic">— missing —</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</t>
+
+</templates>

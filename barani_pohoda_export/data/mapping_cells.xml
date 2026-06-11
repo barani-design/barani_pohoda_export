@@ -1,0 +1,386 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+  <!-- noupdate="1": the POHODA code matrix, seeded once. Invoice cells are
+         one per (rule x fiscal profile). The down-payment rule also has explicit
+         down_payment_deduction cells for settlement odpočet-zálohy lines. Each
+         cell carries the account assignment, VAT classification, control-statement
+         (KV) code and, for OSS, the MOSS service type. enabled_state is active /
+         blocked / review_required.
+         These are MIGRATION-SEED values from the DOC 03 matrix and must be
+         accountant-verified (and the dictionary codes given real labels) before
+         any production export. -->
+  <data noupdate="1">
+    <!-- odpocet_zalohy -->
+    <record id="cell_odpocet_zalohy_sk_domestic_no_vat_id" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="accountant_note">OQ-1 v2 / advance-VAT: a domestic advance is the SK 'dan&#345;ov&#253; doklad k prijatej platbe' - its base posts to 324 (Prijat&#233; preddavky) and it carries the domestic output VAT, declared on receipt (&#167;19(4)). Seeded as the 324 placeholder p&#345;edkont&#225;cia + VAT 'UD'. The matching settlement deduction MUST use the same VAT classification so the final invoice nets to the difference (no double counting). Confirm the exact POHODA p&#345;edkont&#225;cia and Clenenie/KV codes via import test before production (verify_before_production).</field>
+      <field name="rule_id" ref="rule_odpocet_zalohy"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_no_vat_id"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">review_required</field>
+      <field name="account_assignment_id" ref="aa_advance_324"/>
+      <field name="downpayment_account_assignment_id" ref="aa_advance_324"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_un"/>
+    </record>
+    <record id="cell_odpocet_zalohy_sk_domestic_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="accountant_note">OQ-1 v2 / advance-VAT: a domestic advance is the SK 'dan&#345;ov&#253; doklad k prijatej platbe' - its base posts to 324 (Prijat&#233; preddavky) and it carries the domestic output VAT, declared on receipt (&#167;19(4)). Seeded as the 324 placeholder p&#345;edkont&#225;cia + VAT 'UD'. The matching settlement deduction MUST use the same VAT classification so the final invoice nets to the difference (no double counting). Confirm the exact POHODA p&#345;edkont&#225;cia and Clenenie/KV codes via import test before production (verify_before_production).</field>
+      <field name="rule_id" ref="rule_odpocet_zalohy"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">review_required</field>
+      <field name="account_assignment_id" ref="aa_advance_324"/>
+      <field name="downpayment_account_assignment_id" ref="aa_advance_324"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_odpocet_zalohy_eu_b2b_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="accountant_note">OQ-1 v2 / advance-VAT: an EU-B2B advance is generally reverse-charge / zero-rated, so VAT 'UN' is plausibly correct; the base still posts to 324 (advance liability), seeded as the 324 placeholder p&#345;edkont&#225;cia. Confirm via import test before production (verify_before_production).</field>
+      <field name="rule_id" ref="rule_odpocet_zalohy"/>
+      <field name="fiscal_profile_id" ref="fp_eu_b2b_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_advance_324"/>
+      <field name="downpayment_account_assignment_id" ref="aa_advance_324"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_odpocet_zalohy_foreign_non_eu" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="accountant_note">OQ-1 v2 / advance-VAT: a non-EU export advance is generally zero-rated, so VAT 'UN' is plausibly correct; the base still posts to 324 (advance liability), seeded as the 324 placeholder p&#345;edkont&#225;cia. Confirm via import test before production (verify_before_production).</field>
+      <field name="rule_id" ref="rule_odpocet_zalohy"/>
+      <field name="fiscal_profile_id" ref="fp_foreign_non_eu"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_advance_324"/>
+      <field name="downpayment_account_assignment_id" ref="aa_advance_324"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_odpocet_zalohy_oss_b2c_goods" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="accountant_note">OQ-1 v2 / advance-VAT: an OSS advance carries destination VAT (not 'UN') and its base posts to 324; the dictionary has no OSS-specific destination-VAT code yet, so this cell stays review_required. Seeded as the 324 placeholder p&#345;edkont&#225;cia + VAT 'UN' pending an OSS destination-VAT code. Confirm via import test before production (verify_before_production).</field>
+      <field name="rule_id" ref="rule_odpocet_zalohy"/>
+      <field name="fiscal_profile_id" ref="fp_oss_b2c_goods"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">review_required</field>
+      <field name="account_assignment_id" ref="aa_advance_324"/>
+      <field name="downpayment_account_assignment_id" ref="aa_advance_324"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+      <field name="moss_service_type_id" ref="moss_gd"/>
+    </record>
+    <!-- odpocet_zalohy: explicit settlement deduction cells (Bucket B Step 1) -->
+    <record id="cell_odpocet_zalohy_deduction_sk_domestic_no_vat_id" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="accountant_note">OQ-1 v2 / advance-VAT: this settlement deduction (odpo&#269;et z&#225;lohy) reverses the advance - base against 324 (Prijat&#233; preddavky), with the SAME domestic VAT classification as the supply line so only the difference enters the VAT return. Seeded as the 324 placeholder p&#345;edkont&#225;cia + VAT 'UD'. Confirm the POHODA p&#345;edkont&#225;cia + KV code via import test before production (verify_before_production).</field>
+      <field name="rule_id" ref="rule_odpocet_zalohy"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_no_vat_id"/>
+      <field name="document_kind">down_payment_deduction</field>
+      <field name="enabled_state">review_required</field>
+      <field name="account_assignment_id" ref="aa_advance_324"/>
+      <field name="downpayment_account_assignment_id" ref="aa_advance_324"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_un"/>
+    </record>
+    <record id="cell_odpocet_zalohy_deduction_sk_domestic_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="accountant_note">OQ-1 v2 / advance-VAT: this settlement deduction (odpo&#269;et z&#225;lohy) reverses the advance - base against 324 (Prijat&#233; preddavky), with the SAME domestic VAT classification as the supply line so only the difference enters the VAT return. Seeded as the 324 placeholder p&#345;edkont&#225;cia + VAT 'UD'. Confirm the POHODA p&#345;edkont&#225;cia + KV code via import test before production (verify_before_production).</field>
+      <field name="rule_id" ref="rule_odpocet_zalohy"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_vat_payer"/>
+      <field name="document_kind">down_payment_deduction</field>
+      <field name="enabled_state">review_required</field>
+      <field name="account_assignment_id" ref="aa_advance_324"/>
+      <field name="downpayment_account_assignment_id" ref="aa_advance_324"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_odpocet_zalohy_deduction_eu_b2b_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="accountant_note">OQ-1 v2 / advance-VAT: an EU-B2B advance is generally reverse-charge / zero-rated, so VAT 'UN' is plausibly correct; the base still posts to 324 (advance liability), seeded as the 324 placeholder p&#345;edkont&#225;cia. Confirm via import test before production (verify_before_production).</field>
+      <field name="rule_id" ref="rule_odpocet_zalohy"/>
+      <field name="fiscal_profile_id" ref="fp_eu_b2b_vat_payer"/>
+      <field name="document_kind">down_payment_deduction</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_advance_324"/>
+      <field name="downpayment_account_assignment_id" ref="aa_advance_324"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_odpocet_zalohy_deduction_foreign_non_eu" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="accountant_note">OQ-1 v2 / advance-VAT: a non-EU export advance is generally zero-rated, so VAT 'UN' is plausibly correct; the base still posts to 324 (advance liability), seeded as the 324 placeholder p&#345;edkont&#225;cia. Confirm via import test before production (verify_before_production).</field>
+      <field name="rule_id" ref="rule_odpocet_zalohy"/>
+      <field name="fiscal_profile_id" ref="fp_foreign_non_eu"/>
+      <field name="document_kind">down_payment_deduction</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_advance_324"/>
+      <field name="downpayment_account_assignment_id" ref="aa_advance_324"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_odpocet_zalohy_deduction_oss_b2c_goods" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="accountant_note">OQ-1 v2 / advance-VAT: an OSS advance carries destination VAT (not 'UN') and its base posts to 324; the dictionary has no OSS-specific destination-VAT code yet, so this cell stays review_required. Seeded as the 324 placeholder p&#345;edkont&#225;cia + VAT 'UN' pending an OSS destination-VAT code. Confirm via import test before production (verify_before_production).</field>
+      <field name="rule_id" ref="rule_odpocet_zalohy"/>
+      <field name="fiscal_profile_id" ref="fp_oss_b2c_goods"/>
+      <field name="document_kind">down_payment_deduction</field>
+      <field name="enabled_state">review_required</field>
+      <field name="account_assignment_id" ref="aa_advance_324"/>
+      <field name="downpayment_account_assignment_id" ref="aa_advance_324"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+      <field name="moss_service_type_id" ref="moss_gd"/>
+    </record>
+    <!-- shipping_goods -->
+    <record id="cell_shipping_goods_sk_domestic_no_vat_id" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_shipping_goods"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_no_vat_id"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_d2"/>
+    </record>
+    <record id="cell_shipping_goods_sk_domestic_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_shipping_goods"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_a1"/>
+    </record>
+    <record id="cell_shipping_goods_eu_b2b_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_shipping_goods"/>
+      <field name="fiscal_profile_id" ref="fp_eu_b2b_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_uddodeu"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_shipping_goods_foreign_non_eu" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_shipping_goods"/>
+      <field name="fiscal_profile_id" ref="fp_foreign_non_eu"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_unodps"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_shipping_goods_oss_b2c_goods" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_shipping_goods"/>
+      <field name="fiscal_profile_id" ref="fp_oss_b2c_goods"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+      <field name="moss_service_type_id" ref="moss_gd"/>
+    </record>
+    <!-- repairs_calibration -->
+    <record id="cell_repairs_calibration_sk_domestic_no_vat_id" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_repairs_calibration"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_no_vat_id"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_d2"/>
+    </record>
+    <record id="cell_repairs_calibration_sk_domestic_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_repairs_calibration"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_a1"/>
+    </record>
+    <record id="cell_repairs_calibration_eu_b2b_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_repairs_calibration"/>
+      <field name="fiscal_profile_id" ref="fp_eu_b2b_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_udzahrsl"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_repairs_calibration_foreign_non_eu" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_repairs_calibration"/>
+      <field name="fiscal_profile_id" ref="fp_foreign_non_eu"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_unodps"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_repairs_calibration_oss_b2c_goods" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_repairs_calibration"/>
+      <field name="fiscal_profile_id" ref="fp_oss_b2c_goods"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">blocked</field>
+      <field name="accountant_note">Repairs performed in Slovakia must use the domestic (Obchody v SK) treatment, not OSS. Do not assign OSS GD here.</field>
+    </record>
+    <!-- vyrobky -->
+    <record id="cell_vyrobky_sk_domestic_no_vat_id" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_vyrobky"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_no_vat_id"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_1"/>
+      <field name="downpayment_account_assignment_id" ref="aa_1"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_d2"/>
+    </record>
+    <record id="cell_vyrobky_sk_domestic_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_vyrobky"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_1"/>
+      <field name="downpayment_account_assignment_id" ref="aa_1"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_a1"/>
+    </record>
+    <record id="cell_vyrobky_eu_b2b_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_vyrobky"/>
+      <field name="fiscal_profile_id" ref="fp_eu_b2b_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_1"/>
+      <field name="downpayment_account_assignment_id" ref="aa_1"/>
+      <field name="vat_classification_id" ref="vat_uddodeu"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_vyrobky_foreign_non_eu" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_vyrobky"/>
+      <field name="fiscal_profile_id" ref="fp_foreign_non_eu"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_1"/>
+      <field name="downpayment_account_assignment_id" ref="aa_1"/>
+      <field name="vat_classification_id" ref="vat_unodps"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_vyrobky_oss_b2c_goods" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_vyrobky"/>
+      <field name="fiscal_profile_id" ref="fp_oss_b2c_goods"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_3"/>
+      <field name="downpayment_account_assignment_id" ref="aa_3"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+      <field name="moss_service_type_id" ref="moss_gd"/>
+    </record>
+    <!-- tovar -->
+    <record id="cell_tovar_sk_domestic_no_vat_id" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_tovar"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_no_vat_id"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_3"/>
+      <field name="downpayment_account_assignment_id" ref="aa_3"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_d2"/>
+    </record>
+    <record id="cell_tovar_sk_domestic_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_tovar"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_3"/>
+      <field name="downpayment_account_assignment_id" ref="aa_3"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_a1"/>
+    </record>
+    <record id="cell_tovar_eu_b2b_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_tovar"/>
+      <field name="fiscal_profile_id" ref="fp_eu_b2b_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_3"/>
+      <field name="downpayment_account_assignment_id" ref="aa_3"/>
+      <field name="vat_classification_id" ref="vat_uddodeu"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_tovar_foreign_non_eu" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_tovar"/>
+      <field name="fiscal_profile_id" ref="fp_foreign_non_eu"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_3"/>
+      <field name="downpayment_account_assignment_id" ref="aa_3"/>
+      <field name="vat_classification_id" ref="vat_unodps"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_tovar_oss_b2c_goods" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_tovar"/>
+      <field name="fiscal_profile_id" ref="fp_oss_b2c_goods"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_3"/>
+      <field name="downpayment_account_assignment_id" ref="aa_3"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+      <field name="moss_service_type_id" ref="moss_gd"/>
+    </record>
+    <!-- sluzby -->
+    <record id="cell_sluzby_sk_domestic_no_vat_id" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_sluzby"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_no_vat_id"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_d2"/>
+    </record>
+    <record id="cell_sluzby_sk_domestic_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_sluzby"/>
+      <field name="fiscal_profile_id" ref="fp_sk_domestic_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_ud"/>
+      <field name="control_statement_code_id" ref="kv_a1"/>
+    </record>
+    <record id="cell_sluzby_eu_b2b_vat_payer" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_sluzby"/>
+      <field name="fiscal_profile_id" ref="fp_eu_b2b_vat_payer"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">review_required</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+      <field name="accountant_note">Residual services to EU B2B need accountant verification; confirm repairs/shipping matched their own rules first.</field>
+    </record>
+    <record id="cell_sluzby_foreign_non_eu" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_sluzby"/>
+      <field name="fiscal_profile_id" ref="fp_foreign_non_eu"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">active</field>
+      <field name="account_assignment_id" ref="aa_2"/>
+      <field name="downpayment_account_assignment_id" ref="aa_2"/>
+      <field name="vat_classification_id" ref="vat_unodps"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+    </record>
+    <record id="cell_sluzby_oss_b2c_goods" model="barani.pohoda.export.rule.mapping.cell">
+      <field name="rule_id" ref="rule_sluzby"/>
+      <field name="fiscal_profile_id" ref="fp_oss_b2c_goods"/>
+      <field name="document_kind">invoice</field>
+      <field name="enabled_state">review_required</field>
+      <field name="account_assignment_id" ref="aa_3"/>
+      <field name="downpayment_account_assignment_id" ref="aa_3"/>
+      <field name="vat_classification_id" ref="vat_un"/>
+      <field name="control_statement_code_id" ref="kv_kn"/>
+      <field name="moss_service_type_id" ref="moss_gd"/>
+      <field name="accountant_note">OSS services are out of phase-1 scope unless explicitly approved by the accountant.</field>
+    </record>
+  </data>
+</odoo>

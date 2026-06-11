@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Module category (groups appear cleanly on the user form) -->
+    <record id="module_category_barani_pohoda_export" model="ir.module.category">
+        <field name="name">BARANI POHODA Export</field>
+        <field name="description">Access rights for the BARANI POHODA export module.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- Groups (implication chain: config manager > manager > user > internal user) -->
+    <record id="group_export_user" model="res.groups">
+        <field name="name">Export User</field>
+        <field name="category_id" ref="module_category_barani_pohoda_export"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Run dry-run / preflight and generate draft / test XML.</field>
+    </record>
+
+    <record id="group_export_manager" model="res.groups">
+        <field name="name">Export Manager</field>
+        <field name="category_id" ref="module_category_barani_pohoda_export"/>
+        <field name="implied_ids" eval="[(4, ref('group_export_user'))]"/>
+        <field name="comment">Approve warnings, reset export state with a reason, optionally send to POHODA after Phase 1.</field>
+    </record>
+
+    <record id="group_export_config_manager" model="res.groups">
+        <field name="name">Export Configuration Manager</field>
+        <field name="category_id" ref="module_category_barani_pohoda_export"/>
+        <field name="implied_ids" eval="[(4, ref('group_export_manager'))]"/>
+        <field name="comment">Edit dictionaries, fiscal profiles, rules and mapping cells.</field>
+        <!-- Add the standard admin users so whoever installs the module can manage it. -->
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- Multi-company record rules (global). Company-agnostic dictionaries
+         (VAT/KV/MOSS) and fiscal profiles are intentionally shared. -->
+    <record id="rule_pohoda_config_company" model="ir.rule">
+        <field name="name">POHODA config: multi-company</field>
+        <field name="model_id" ref="model_barani_pohoda_export_config"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_pohoda_rule_company" model="ir.rule">
+        <field name="name">POHODA export rule: multi-company</field>
+        <field name="model_id" ref="model_barani_pohoda_export_rule"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_pohoda_cell_company" model="ir.rule">
+        <field name="name">POHODA mapping cell: multi-company</field>
+        <field name="model_id" ref="model_barani_pohoda_export_rule_mapping_cell"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_pohoda_batch_company" model="ir.rule">
+        <field name="name">POHODA export batch: multi-company</field>
+        <field name="model_id" ref="model_barani_pohoda_export_batch"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_pohoda_batch_move_company" model="ir.rule">
+        <field name="name">POHODA export batch document: multi-company</field>
+        <field name="model_id" ref="model_barani_pohoda_export_batch_move"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_pohoda_account_assignment_company" model="ir.rule">
+        <field name="name">POHODA account assignment: multi-company (global codes shared)</field>
+        <field name="model_id" ref="model_barani_pohoda_account_assignment"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

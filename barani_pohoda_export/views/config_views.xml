@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pohoda_config_form" model="ir.ui.view">
+        <field name="name">barani.pohoda.export.config.form</field>
+        <field name="model">barani.pohoda.export.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="active" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Pohoda"/></h1>
+                    </div>
+                    <group>
+                        <group string="Target">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="pohoda_ico"/>
+                            <field name="pohoda_key"/>
+                            <field name="data_pack_version"/>
+                            <field name="invoice_version"/>
+                            <field name="encoding"/>
+                        </group>
+                        <group string="Documents and dates">
+                            <field name="journal_ids" widget="many2many_tags"/>
+                            <field name="key_date"/>
+                            <field name="accounting_date_source"/>
+                            <field name="export_addresses"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Geography / OSS">
+                            <field name="country_group_eu_id"/>
+                            <field name="oss_enabled"/>
+                            <field name="evidentiary_resources"/>
+                            <field name="document_header_vat_classification_id"/>
+                        </group>
+                        <group string="Advance / DPI">
+                            <field name="advance_flow_mode"/>
+                            <field name="dpi_symvar_policy"/>
+                            <field name="advance_credit_note_policy"/>
+                            <field name="send_advance_deduction_with_reference"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Phase / schema">
+                            <field name="phase_1_payment_export"/>
+                            <field name="xsd_schema_set_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pohoda_config_tree" model="ir.ui.view">
+        <field name="name">barani.pohoda.export.config.tree</field>
+        <field name="model">barani.pohoda.export.config</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="advance_flow_mode"/>
+                <field name="oss_enabled"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_pohoda_config" model="ir.actions.act_window">
+        <field name="name">POHODA Export Settings</field>
+        <field name="res_model">barani.pohoda.export.config</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
