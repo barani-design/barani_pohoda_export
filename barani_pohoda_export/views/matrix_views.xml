@@ -10,6 +10,7 @@
                 <field name="name"/>
                 <field name="geography"/>
                 <field name="customer_tax_status"/>
+                <field name="account_fiscal_position_ids" widget="many2many_tags" optional="show"/>
                 <field name="is_oss"/>
                 <field name="blocks_export_when_used"/>
             </tree>
@@ -36,7 +37,14 @@
                             <field name="active"/>
                         </group>
                     </group>
-                    <field name="account_fiscal_position_ids" widget="many2many_tags"/>
+                    <group string="Linked Odoo fiscal positions">
+                        <!-- The resolver maps move.fiscal_position_id -> exactly one
+                             active profile through this list. A bare m2m_tags outside
+                             a group renders invisibly when empty (16.0.1.11.4 fix). -->
+                        <field name="account_fiscal_position_ids" widget="many2many_tags"
+                               nolabel="1" colspan="2"
+                               placeholder="Add the Odoo fiscal positions this profile represents..."/>
+                    </group>
                     <field name="notes" placeholder="Notes..."/>
                 </sheet>
                 <div class="oe_chatter">

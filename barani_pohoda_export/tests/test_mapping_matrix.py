@@ -6,6 +6,8 @@
 # resolved dictionary codes. A broken ref in the seed already fails the install; this
 # additionally pins the intended values so a future edit cannot silently drift them.
 
+from lxml import etree
+
 from odoo.tests import TransactionCase, tagged
 
 
@@ -65,3 +67,32 @@ class TestMappingMatrixSeed(TransactionCase):
     def test_review_required_cell(self):
         cell = self._ref('cell_sluzby_oss_b2c_goods')
         self.assertEqual(cell.enabled_state, 'review_required')
+
+
+@tagged('post_install', '-at_install')
+class TestProfileFormUsability(TransactionCase):
+    """16.0.1.11.4 regression: the fiscal-position link must render visibly.
+
+    A bare many2many_tags outside a <group> paints nothing when empty, which made
+    the one field the resolver depends on effectively un-settable from the UI
+    (staging finding, 2026-06-12). Pin: the field sits inside a <group> on the
+    form, and is present on the tree view.
+    """
+
+    def _arch(self, view_xmlid):
+        view = self.env.ref(view_xmlid)
+        return etree.fromstring(view.arch_db.encode())
+
+    def test_fiscal_position_link_inside_group_on_form(self):
+        arch = self._arch('barani_pohoda_export.view_pohoda_fiscal_profile_form')
+        nodes = arch.xpath("//field[@name='account_fiscal_position_ids']")
+        self.assertTrue(nodes, "fiscal-position link missing from the profile form")
+        ancestors = [el.tag for el in nodes[0].iterancestors()]
+        self.assertIn('group', ancestors,
+                      "fiscal-position link must live inside a labeled <group> "
+                      "(bare m2m_tags renders invisibly when empty)")
+
+    def test_fiscal_position_link_on_tree(self):
+        arch = self._arch('barani_pohoda_export.view_pohoda_fiscal_profile_tree')
+        self.assertTrue(arch.xpath("//field[@name='account_fiscal_position_ids']"),
+                        "fiscal-position link missing from the profile list")
